@@ -525,7 +525,8 @@ KEY3=VALUE3
 <tr><td>RNACOS_CONSOLE_LOGIN_ONE_HOUR_LIMIT</td><td>r-nacos控制台登录1小时失败次数限制</td><td>默认是5,一个用户连续登陆失败5次，会被锁定1个小时</td><td>5</td><td>0.4.x</td></tr>
 <tr><td>RNACOS_HTTP_WORKERS</td><td>http工作线程数</td><td>cpu核数</td><td>8</td><td>0.1.x</td></tr>
 <tr><td>RNACOS_CONFIG_DB_FILE</td><td>配置中心的本地数据库文件地址【0.2.x后不在使用】</td><td>config.db</td><td>config.db</td><td>0.1.x</td></tr>
-<tr><td>RNACOS_CONFIG_DB_DIR</td><td>配置中心的本地数据库sled文件夹, 会在系统运行时自动创建</td><td>nacos_db</td><td>nacos_db</td><td>0.2.x</td></tr>
+<tr><td>RNACOS_CONFIG_DB_DIR</td><td>配置中心的本地数据库文件夹, 会在系统运行时自动创建【因语义原因，v0.6.x后推荐使用RNACOS_DATA_DIR】</td><td>nacos_db</td><td>nacos_db</td><td>0.2.x</td></tr>
+<tr><td>RNACOS_DATA_DIR</td><td>本地数据库文件夹, 会在系统运行时自动创建【与RNACOS_CONFIG_DB_DIR等价，用于替代RNACOS_CONFIG_DB_DIR】</td><td>linux,MacOS默认为~/.local/share/r-nacos/nacos_db;windows,docker默认为nacos_db</td><td>nacos_db</td><td>0.6.x</td></tr>
 <tr><td>RNACOS_RAFT_NODE_ID</td><td>节点id</td><td>1</td><td>1</td><td>0.3.0</td></tr>
 <tr><td>RNACOS_RAFT_NODE_ADDR</td><td>节点地址Ip:GrpcPort,单节点运行时每次启动都会生效；多节点集群部署时，只取加入集群时配置的值</td><td>127.0.0.1:GrpcPort</td><td>127.0.0.1:9848</td><td>0.3.0</td></tr>
 <tr><td>RNACOS_RAFT_AUTO_INIT</td><td>是否当做主节点初始化,(只在每一次启动时生效)</td><td>节点1时默认为true,节点非1时为false</td><td>true</td><td>0.3.0</td></tr>
@@ -692,7 +693,7 @@ java nacos server版本: 2.1.0</p>
 <tr><td>gnu debian包</td><td>$version</td><td>qingpan/rnacos:v0.4.2</td><td>docker包基于debian-slim,体积比较大(压缩包36M,解压后102M),运行性能相对较高</td></tr>
 <tr><td>musl alpine包</td><td>$version-alpine</td><td>qingpan/rnacos:v0.4.2-alpine</td><td>docker包基于alpine,体积比较小(压缩包11M,解压后34M),运行性能相对较低</td></tr>
 </tbody></table>
-<p>如果不观注版本，可以使用最新正式版本tag。</p>
+<p>如果不关注版本，可以使用最新正式版本tag。</p>
 <ul>
 <li>最新的gnu正式版本: <code>qingpan/rnacos:stable</code></li>
 <li>最新的alpine正式版本: <code>qingpan/rnacos:stable-alpine</code></li>
@@ -800,7 +801,7 @@ r-nacos 和 java版主体逻辑相同，但实现的细节有些区别。</p>
 <p>http 写入：</p>
 <ol>
 <li>客户端随机向一个节点发起一个注册服务实例请求</li>
-<li>请求跳过服务路由判断，如果服务路由的节点是本节点则处理，否则路由到指定的其它节点处理</li>
+<li>请求通过服务路由判断，如果服务路由的节点是本节点则处理，否则路由到指定的其它节点处理</li>
 <li>收到本节点负责的服务实例请求，把请求注册到注册中心中</li>
 <li>返回处理结果</li>
 <li>异步同步更新的数据到其它节点</li>
